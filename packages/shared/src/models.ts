@@ -60,6 +60,22 @@ export const SUPPORTED_CHAT_MODELS = [
       outputUsdPerMillionTokens: 1.25,
     },
   },
+  {
+    id: "gpt-5-nano",
+    provider: "openai",
+    pricing: {
+      inputUsdPerMillionTokens: 0.05,
+      outputUsdPerMillionTokens: 0.4,
+    },
+  },
+  {
+    id: "gpt-oss-20b",
+    provider: "openai",
+    pricing: {
+      inputUsdPerMillionTokens: 0.03,
+      outputUsdPerMillionTokens: 0.13,
+    },
+  },
 ] as const satisfies readonly SupportedChatModelDefinition[];
 
 export type SupportedChatModel = (typeof SUPPORTED_CHAT_MODELS)[number];
@@ -69,4 +85,5 @@ export function findSupportedChatModel(modelId: string) {
   return SUPPORTED_CHAT_MODELS.find((model) => model.id === modelId);
 }
 
-export const DEFAULT_CHAT_MODEL_ID: SupportedChatModelId = "claude-opus-4-6";
+// export const DEFAULT_CHAT_MODEL_ID: SupportedChatModelId = "claude-opus-4-6";
+export const DEFAULT_CHAT_MODEL_ID: SupportedChatModelId = "gpt-5-nano";
