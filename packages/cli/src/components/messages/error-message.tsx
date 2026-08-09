@@ -1,6 +1,6 @@
 import { TextAttributes } from "@opentui/core";
-import { useTheme } from "../../providers/theme";
 import { EmptyBorder } from "../border";
+import { useTheme } from "../../providers/theme";
 
 type Props = {
   message: string;
@@ -33,4 +33,4 @@ export function ErrorMessage({ message }: Props) {
       </box>
     </box>
   );
-}
+};
