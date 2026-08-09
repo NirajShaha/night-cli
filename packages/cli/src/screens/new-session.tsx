@@ -1,16 +1,17 @@
 import { useEffect, useMemo, useRef } from "react";
-import { useNavigate, useLocation } from "react-router";
-import { useTheme } from "../providers/theme";
-import { UserMessage } from "../components/messages";
-import { SessionShell } from "../components/session-shell";
 import { z } from "zod";
-import { DEFAULT_CHAT_MODEL_ID } from "@nightcli/shared";
+import { Mode } from "@nightcli/database/enums";
+import { useNavigate, useLocation } from "react-router";
+import { SessionShell } from "../components/session-shell";
+import { UserMessage } from "../components/messages";
 import { useToast } from "../providers/toast";
 import { apiClient } from "../lib/api-client";
 import { getErrorMessage } from "../lib/http-errors";
 
 const newSessionStateSchema = z.object({
   message: z.string(),
+  mode: z.enum(Mode),
+  model: z.string(),
 });
 
 export function NewSession() {
@@ -22,7 +23,7 @@ export function NewSession() {
   const state = useMemo(() => {
     const parsed = newSessionStateSchema.safeParse(location.state);
     return parsed.success ? parsed.data : null;
-  }, [location.state]);
+  }, [location.state])
 
   // Guard: if navigated here directly without state, go home
   useEffect(() => {
@@ -31,7 +32,7 @@ export function NewSession() {
     }
   }, [state, navigate]);
 
-  // Create the session on mount - this screen exist to do this
+  // Create the session on mount — this screen exists to do this
   useEffect(() => {
     if (!state || hasStartedRef.current) return;
 
@@ -47,8 +48,8 @@ export function NewSession() {
             initialMessage: {
               role: "USER",
               content: state.message,
-              mode: "BUILD",
-              model: DEFAULT_CHAT_MODEL_ID,
+              mode: state.mode,
+              model: state.model,
             },
           },
         });
@@ -58,16 +59,15 @@ export function NewSession() {
           throw new Error(await getErrorMessage(res));
         }
         const session = await res.json();
-        navigate(`/sessions/${session.id}`, {
-          replace: true,
-          state: { session },
-        });
+        navigate(
+          `/sessions/${session.id}`,
+          { replace: true, state: { session } }
+        );
       } catch (error) {
         if (ignore) return;
         toast.show({
           variant: "error",
-          message:
-            error instanceof Error ? error.message : "Failed to create session",
+          message: error instanceof Error ? error.message : "Failed to create session",
         });
         navigate("/", { replace: true });
       }
@@ -83,7 +83,7 @@ export function NewSession() {
 
   return (
     <SessionShell onSubmit={() => {}} inputDisabled loading>
-      <UserMessage message={state.message} />
+      <UserMessage message={state.message} mode={state.mode} />
     </SessionShell>
   );
-}
+};
