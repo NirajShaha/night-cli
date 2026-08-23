@@ -5,7 +5,11 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
   "dependencies": {
+    "ai": "^6.0.184",
     "zod": "^4.4.3"
   }
 }
