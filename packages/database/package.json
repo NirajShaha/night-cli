@@ -4,13 +4,13 @@
   "private": "true",
   "exports": {
     ".": "./src/index.ts",
-    "./client": "./src/client.ts",
-    "./enums": "./src/enums.ts"
+    "./client": "./src/client.ts"
   },
   "scripts": {
     "db:generate": "bunx prisma generate"
   },
   "devDependencies": {
+    "@types/bun": "latest",
     "@types/node": "^25.9.1",
     "prisma": "^7.8.0"
   },
